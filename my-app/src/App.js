@@ -7,7 +7,7 @@ import {useEffect, useState} from "react"
 import { initializeApp } from 'firebase/app';
 import {useLocation} from "react-router-dom";
 import Content from '/home/malik/Desktop/crypto/Governance/my-app/src/components/Content.jsx';
-
+import {BigNumber} from "bignumber.js";
 import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
 import { getDatabase, ref, set,get,child, onValue } from "firebase/database";
 import {ref as sRef, uploadBytes, getDownloadUrl, getDownloadURL } from "firebase/storage";
@@ -145,9 +145,12 @@ function App() {
      }
 
      const mint = async(e) => {//not done yet
+      const Big = new BigNumber(value).times(10 ** 18)
+      const wei = web3.utils.toBN(Big)
+      console.log(wei);
        await contracts.methods.mint().send({
          from:window.ethereum.selectedAddress,
-         value:0
+         value:wei
        })
      }
 
@@ -237,7 +240,7 @@ function App() {
            <div className="designate">
              <label>designate votes to anyone</label>
              <input type="text" onChange={(e) => (setDesi(e.target.value))}/>
-             <button onClick={(e)=>(designate())}>Mint</button>
+             <button onClick={(e)=>(designate())}>Designate</button>
            </div>
         </div>
       </div>
